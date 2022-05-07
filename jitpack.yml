@@ -16,7 +16,3 @@ install:
   - "sdk use java 17.0.1-open"
   - "java -version"
   - "bash gradlew build publishToMavenLocal"
-© 2022 GitHub, Inc.
-Terms
-Privacy
-Securit
