@@ -5,6 +5,10 @@ plugins {
 group 'ua.dhcpcd.dscoreboard'
 version '1.0'
 
+plugins {
+    id 'maven-publish'
+}
+
 repositories {
     mavenCentral()
     maven { url = uri("https://papermc.io/repo/repository/maven-public/") }
