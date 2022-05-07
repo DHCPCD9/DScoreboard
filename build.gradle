@@ -7,11 +7,6 @@ group 'ua.dhcpcd.dscoreboard'
 version '1.0'
 
 
-artifacts {
-    archives task("jarTask", type: Jar) {
-        from "build/libs/*.jar"
-    }
-}
 
 repositories {
     mavenCentral()
@@ -30,5 +25,17 @@ dependencies {
     implementation "net.kyori:adventure-platform-bukkit:4.1.0"
     implementation 'com.github.MegavexNetwork:scoreboard-library:master'
 
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'ua.dhcpcd.dscoreboard'
+            artifactId = 'dscoreboard'
+            version = '1.0'
+
+            from components.java
+        }
+    }
 }
 
