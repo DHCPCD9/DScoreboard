@@ -7,15 +7,10 @@ group 'ua.dhcpcd.dscoreboard'
 version '1.0'
 
 
-
-sourceSets {
-    api
-    impl
-}
-
-
 artifacts {
-    archives jar
+    archives task("jarTask", type: Jar) {
+        from "build/libs/*.jar"
+    }
 }
 
 repositories {
@@ -37,6 +32,3 @@ dependencies {
 
 }
 
-jar {
-    from "${project.buildDir}/libs/dscoreboard-*.jar"
-}
