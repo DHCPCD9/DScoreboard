@@ -15,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class PerPlayerScoreboard {
 
     private final Component title;
     private final Function<Player, List<Component>> lines;
+    public final HashMap<Player, Sidebar> sidebars = new HashMap<>();
     private final ScoreboardManager scoreboardManager;
     public int maxLines;
 
@@ -50,12 +52,13 @@ public class PerPlayerScoreboard {
     public void show(Player player) {
 
         Sidebar sidebar = scoreboardManager.sidebar(this.maxLines);
+
         sidebar.title(title);
 
-        if (sidebar.players().stream().noneMatch(p -> p.getUniqueId().toString().equalsIgnoreCase(player.getUniqueId().toString()))) {
-            sidebar.addPlayer(player);
-            sidebar.visible(true);
-        }
+        sidebar.addPlayer(player);
+        sidebar.visible(true);
+
+        sidebars.put(player, sidebar);
 
 
         update(player);
@@ -63,7 +66,7 @@ public class PerPlayerScoreboard {
 
     public void update(Player player) {
 
-        Sidebar sidebar = scoreboardManager.sidebars().stream().filter(s -> s.players().stream().anyMatch(p -> p.getUniqueId().toString().equalsIgnoreCase(player.getUniqueId().toString()))).findFirst().orElse(null);
+        Sidebar sidebar = sidebars.get(player);
 
         if (sidebar == null) {
             show(player);
@@ -78,7 +81,11 @@ public class PerPlayerScoreboard {
     }
 
     public void hide(Player player) {
-        scoreboardManager.sidebars().stream().filter(s -> s.players().contains(player)).findFirst().ifPresent(s -> s.visible(false));
+        Sidebar sidebar = sidebars.get(player);
+        if (sidebar == null) {
+            return;
+        }
+        sidebar.visible(false);
     }
 
     public void update() {
@@ -87,11 +94,19 @@ public class PerPlayerScoreboard {
 
     public void destroy(Player p) {
         hide(p);
-        scoreboardManager.sidebars().stream().filter(s -> s.players().contains(p)).findFirst().ifPresent(Closeable::close);
+
+        Sidebar sidebar = sidebars.get(p);
+        if (sidebar == null) {
+            return;
+        }
+
+        sidebar.removePlayer(p);
+        sidebars.remove(p);
+        sidebars.remove(p);
     }
 
     public void destroy() {
-        scoreboardManager.sidebars().forEach(c -> c.players().stream().findFirst().ifPresent(this::destroy));
+        scoreboardManager.sidebars().forEach(s -> s.players().stream().findFirst().ifPresent(this::destroy));
     }
 
     public List<Player> getPlayers() {
