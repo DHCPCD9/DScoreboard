@@ -22,11 +22,13 @@ public class PerPlayerScoreboard {
     private final Component title;
     private final Function<Player, List<Component>> lines;
     private final ScoreboardManager scoreboardManager;
+    public int maxLines;
 
 
-    public PerPlayerScoreboard(JavaPlugin plugin, Component title, Function<Player, List<Component>> lines) {
+    public PerPlayerScoreboard(JavaPlugin plugin, Component title, Function<Player, List<Component>> lines, int maxLines) {
         this.title = title;
         this.lines = lines;
+        this.maxLines = maxLines;
 
         try {
             ScoreboardLibraryImplementation.init();
@@ -45,7 +47,7 @@ public class PerPlayerScoreboard {
 
     public void show(Player player) {
 
-        Sidebar sidebar = scoreboardManager.sidebar(Sidebar.MAX_LINES);
+        Sidebar sidebar = scoreboardManager.sidebar(this.maxLines);
         sidebar.title(title);
 
         sidebar.addPlayer(player);
