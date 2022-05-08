@@ -67,7 +67,7 @@ public class PerPlayerScoreboard {
 
         for (int i = sidebar.maxLines(); i > 0; i--) {
             Component component = components.get(i);
-            sidebar.line(i, component);
+            sidebar.line(i - 1, component);
         }
     }
 
