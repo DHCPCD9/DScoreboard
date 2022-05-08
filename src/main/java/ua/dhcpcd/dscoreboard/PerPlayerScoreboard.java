@@ -51,6 +51,7 @@ public class PerPlayerScoreboard {
         sidebar.title(title);
 
         sidebar.addPlayer(player);
+        sidebar.visible(true);
 
         update(player);
     }
