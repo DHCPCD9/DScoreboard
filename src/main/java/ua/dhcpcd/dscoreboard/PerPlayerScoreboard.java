@@ -52,15 +52,18 @@ public class PerPlayerScoreboard {
         Sidebar sidebar = scoreboardManager.sidebar(this.maxLines);
         sidebar.title(title);
 
-        sidebar.addPlayer(player);
-        sidebar.visible(true);
+        if (!sidebar.players().contains(player)) {
+            sidebar.addPlayer(player);
+            sidebar.visible(true);
+        }
+
 
         update(player);
     }
 
     public void update(Player player) {
 
-        Sidebar sidebar = scoreboardManager.sidebars().stream().filter(s -> s.players().contains(player)).findFirst().orElse(null);
+        Sidebar sidebar = scoreboardManager.sidebars().stream().filter(s -> s.players().stream().anyMatch(p -> p.getUniqueId().toString().equalsIgnoreCase(player.getUniqueId().toString()))).findFirst().orElse(null);
 
         if (sidebar == null) {
             show(player);
