@@ -52,7 +52,7 @@ public class PerPlayerScoreboard {
         Sidebar sidebar = scoreboardManager.sidebar(this.maxLines);
         sidebar.title(title);
 
-        if (!sidebar.players().contains(player)) {
+        if (sidebar.players().stream().noneMatch(p -> p.getUniqueId().toString().equalsIgnoreCase(player.getUniqueId().toString()))) {
             sidebar.addPlayer(player);
             sidebar.visible(true);
         }
