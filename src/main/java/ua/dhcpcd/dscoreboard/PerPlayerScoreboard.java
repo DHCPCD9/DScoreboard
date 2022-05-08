@@ -6,6 +6,7 @@ import net.kyori.adventure.text.ScoreComponent;
 import net.megavex.scoreboardlibrary.ScoreboardLibraryImplementation;
 import net.megavex.scoreboardlibrary.api.ScoreboardLibrary;
 import net.megavex.scoreboardlibrary.api.ScoreboardManager;
+import net.megavex.scoreboardlibrary.api.interfaces.Closeable;
 import net.megavex.scoreboardlibrary.api.sidebar.Sidebar;
 import net.megavex.scoreboardlibrary.exception.ScoreboardLibraryLoadException;
 import org.bukkit.Bukkit;
@@ -16,6 +17,7 @@ import org.bukkit.scoreboard.*;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class PerPlayerScoreboard {
 
@@ -78,5 +80,18 @@ public class PerPlayerScoreboard {
 
     public void update() {
         scoreboardManager.sidebars().forEach(s -> s.players().stream().findFirst().ifPresent(this::update));
+    }
+
+    public void destroy(Player p) {
+        hide(p);
+        scoreboardManager.sidebars().stream().filter(s -> s.players().contains(p)).findFirst().ifPresent(Closeable::close);
+    }
+
+    public void destroy() {
+        scoreboardManager.sidebars().forEach(c -> c.players().stream().findFirst().ifPresent(this::destroy));
+    }
+
+    public List<Player> getPlayers() {
+        return scoreboardManager.sidebars().stream().flatMap(s -> s.players().stream()).collect(Collectors.toList());
     }
 }
