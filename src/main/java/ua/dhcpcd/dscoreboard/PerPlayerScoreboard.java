@@ -74,7 +74,7 @@ public class PerPlayerScoreboard {
         }
         List<Component> components = lines.apply(player);
 
-        for (int i = sidebar.maxLines(); i > 0; i--) {
+        for (int i = sidebar.maxLines(); i >= 0; i--) {
             Component component = components.get(i);
             sidebar.line(i - 1, component);
         }
@@ -101,7 +101,6 @@ public class PerPlayerScoreboard {
         }
 
         sidebar.removePlayer(p);
-        sidebars.remove(p);
         sidebars.remove(p);
     }
 
