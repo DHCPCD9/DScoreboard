@@ -103,7 +103,6 @@ public class PerPlayerScoreboard {
 
         sidebar.removePlayer(p);
         sidebars.remove(p);
-        sidebars.remove(p);
     }
 
     public void destroy() {
