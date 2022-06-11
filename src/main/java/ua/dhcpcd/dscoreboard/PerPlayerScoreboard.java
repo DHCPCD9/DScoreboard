@@ -53,6 +53,7 @@ public class PerPlayerScoreboard {
 
         Sidebar sidebar = scoreboardManager.sidebar(this.maxLines);
 
+
         sidebar.title(title);
 
         sidebar.addPlayer(player);
